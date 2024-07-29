@@ -29,7 +29,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const createdUser = await createUser(user);
 
   // Generate token and set it in the response
-  generateToken(res, createdUser.userId);
+  const token = generateToken(res, createdUser.userId);
 
   res.status(201).json({
     _id: createdUser.userId,
@@ -37,6 +37,7 @@ const registerUser = asyncHandler(async (req, res) => {
     email: createdUser.email,
     isAdmin: createdUser.isAdmin,
     createdAt: createdUser.createdAt,
+    token,
   });
 });
 
@@ -50,13 +51,14 @@ const authUser = asyncHandler(async (req, res) => {
 
   if (user && await matchPassword(password, user.password)) {
     // Generate token and set it in the response
-    generateToken(res, user.userId);
+    const token = generateToken(res, user.userId);
 
     res.json({
       _id: user.userId,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      token,
     });
   } else {
     res.status(401);
