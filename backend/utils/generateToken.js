@@ -12,6 +12,7 @@ console.log(token);
     sameSite: 'strict', // Prevent CSRF attacks
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     domain: 'http://54.156.109.164/',
+    secure: process.env.NODE_ENV === 'production',
   });
 };
 
