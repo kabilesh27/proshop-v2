@@ -9,6 +9,7 @@ import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+const cors = require('cors');
 
 const port = process.env.PORT || 5000;
 
@@ -19,6 +20,17 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Use CORS middleware to allow requests from any origin
+app.use(cors({
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // If you want to allow cookies and credentials
+}));
+
+// Handle preflight requests
+app.options('*', cors());
 
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
