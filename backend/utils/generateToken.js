@@ -10,9 +10,6 @@ const generateToken = (res, userId) => {
     httpOnly: true,
     sameSite: 'lax', // Prevent CSRF attacks
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    domain: '54.156.109.164', // Only domain or IP, without protocol
-    secure: process.env.NODE_ENV === 'production',
-    path: '/', // Ensure the cookie is available for all routes
   });
 };
 
