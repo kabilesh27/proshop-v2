@@ -45,13 +45,13 @@ const CartScreen = () => {
         ) : (
           <ListGroup variant='flush'>
             {cartItems.map((item) => (
-              <ListGroup.Item key={item._id}>
+              <ListGroup.Item key={item.userId}>
                 <Row>
                   <Col md={2}>
                     <Image src={item.image} alt={item.name} fluid rounded />
                   </Col>
                   <Col md={3}>
-                    <Link to={`/product/${item._id}`}>{item.name}</Link>
+                    <Link to={`/product/${item.userId}`}>{item.name}</Link>
                   </Col>
                   <Col md={2}>${item.price}</Col>
                   <Col md={2}>
@@ -73,7 +73,7 @@ const CartScreen = () => {
                     <Button
                       type='button'
                       variant='light'
-                      onClick={() => removeFromCartHandler(item._id)}
+                      onClick={() => removeFromCartHandler(item.userId)}
                     >
                       <FaTrash />
                     </Button>

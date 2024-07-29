@@ -76,7 +76,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users/profile
 // @access  Private
 const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await getUserById(req.user._id);
+  const user = await getUserById(req.user.userId);
 
   if (user) {
     res.json({
@@ -95,7 +95,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/profile
 // @access  Private
 const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = await getUserById(req.user._id);
+  const user = await getUserById(req.user.userId);
 
   if (user) {
     const updatedData = {

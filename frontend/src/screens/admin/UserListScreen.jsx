@@ -48,8 +48,8 @@ const UserListScreen = () => {
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user._id}>
-                <td>{user._id}</td>
+              <tr key={user.userId}>
+                <td>{user.userId}</td>
                 <td>{user.name}</td>
                 <td>
                   <a href={`mailto:${user.email}`}>{user.email}</a>
@@ -66,7 +66,7 @@ const UserListScreen = () => {
                     <>
                       <Button
                         as={Link}
-                        to={`/admin/user/${user._id}/edit`}
+                        to={`/admin/user/${user.userId}/edit`}
                         style={{ marginRight: '10px' }}
                         variant='light'
                         className='btn-sm'
@@ -76,7 +76,7 @@ const UserListScreen = () => {
                       <Button
                         variant='danger'
                         className='btn-sm'
-                        onClick={() => deleteHandler(user._id)}
+                        onClick={() => deleteHandler(user.userId)}
                       >
                         <FaTrash style={{ color: 'white' }} />
                       </Button>

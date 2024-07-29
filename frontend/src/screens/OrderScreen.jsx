@@ -107,7 +107,7 @@ console.log(order);
     <Message variant='danger'>{error.data.message}</Message>
   ) : (
     <>
-      <h1>Order {order._id}</h1>
+      <h1>Order {order.userId}</h1>
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>

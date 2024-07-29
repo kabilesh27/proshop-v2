@@ -28,7 +28,7 @@ const getProductByIdController = asyncHandler(async (req, res) => {
 const createProductController = asyncHandler(async (req, res) => {
   const product = {
     productId: generateId(),
-    user: req.user._id,
+    user: req.user.userId,
     name: req.body.name,
     image: req.body.image,
     brand: req.body.brand,
@@ -84,7 +84,7 @@ const createProductReviewController = asyncHandler(async (req, res) => {
     name: req.user.name,
     rating,
     comment,
-    user: req.user._id,
+    user: req.user.userId,
   };
   const product = await addReviewToProduct(productId, review);
   res.status(201).json({ message: 'Review added', product });
