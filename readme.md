@@ -344,8 +344,8 @@ export default defineConfig({
   server: {
     // proxy requests prefixed '/api' and '/uploads'
     proxy: {
-      '/api': 'http://localhost:6000',
-      '/uploads': 'http://localhost:6000',
+      '/api': 'http://54.156.109.164:6000',
+      '/uploads': 'http://54.156.109.164:6000',
     },
   },
 });
@@ -382,8 +382,8 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': 'http://localhost:6000',
-      '/uploads': 'http://localhost:6000',
+      '/api': 'http://54.156.109.164:6000',
+      '/uploads': 'http://54.156.109.164:6000',
     },
   },
 });
