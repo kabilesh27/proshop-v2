@@ -1,75 +1,89 @@
-import mongoose from 'mongoose';
+import { docClient } from '../config/db.js';
 
-const reviewSchema = mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    rating: { type: Number, required: true },
-    comment: { type: String, required: true },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'User',
-    },
-  },
-  {
-    timestamps: true,
+// Helper function to generate unique IDs
+const generateId = () => Date.now().toString();
+
+// Create a product
+const createProduct = async (product) => {
+  const params = {
+    TableName: 'Products',
+    Item: product,
+  };
+  await docClient.put(params).promise();
+  return product;
+};
+
+// Get all products
+const getAllProducts = async () => {
+  const params = {
+    TableName: 'Products',
+  };
+  const result = await docClient.scan(params).promise();
+  return result.Items;
+};
+
+// Get product by ID
+const getProductById = async (productId) => {
+  const params = {
+    TableName: 'Products',
+    Key: { productId },
+  };
+  const result = await docClient.get(params).promise();
+  return result.Item;
+};
+
+// Update product by ID
+const updateProductById = async (productId, updateData) => {
+  const params = {
+    TableName: 'Products',
+    Key: { productId },
+    UpdateExpression: `set ${Object.keys(updateData).map((k, i) => `#${k} = :${k}`).join(', ')}`,
+    ExpressionAttributeNames: Object.keys(updateData).reduce((acc, k) => ({ ...acc, [`#${k}`]: k }), {}),
+    ExpressionAttributeValues: Object.keys(updateData).reduce((acc, k) => ({ ...acc, [`:${k}`]: updateData[k] }), {}),
+    ReturnValues: 'ALL_NEW',
+  };
+  const result = await docClient.update(params).promise();
+  return result.Attributes;
+};
+
+// Delete product by ID
+const deleteProductById = async (productId) => {
+  const params = {
+    TableName: 'Products',
+    Key: { productId },
+  };
+  await docClient.delete(params).promise();
+};
+
+// Add review to product
+const addReviewToProduct = async (productId, review) => {
+  const product = await getProductById(productId);
+  if (!product) {
+    throw new Error('Product not found');
   }
-);
 
-const productSchema = mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'User',
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    image: {
-      type: String,
-      required: true,
-    },
-    brand: {
-      type: String,
-      required: true,
-    },
-    category: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    reviews: [reviewSchema],
-    rating: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    numReviews: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    price: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    countInStock: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
+  product.reviews = product.reviews || [];
+  product.reviews.push(review);
 
-const Product = mongoose.model('Product', productSchema);
+  // Recalculate rating and number of reviews
+  product.numReviews = product.reviews.length;
+  product.rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length;
 
-export default Product;
+  const updatedProduct = await updateProductById(productId, {
+    reviews: product.reviews,
+    numReviews: product.numReviews,
+    rating: product.rating,
+  });
+
+  return updatedProduct;
+};
+
+export {
+  createProduct,
+  getAllProducts,
+  getProductById,
+  updateProductById,
+  deleteProductById,
+  addReviewToProduct,
+  generateId,
+};

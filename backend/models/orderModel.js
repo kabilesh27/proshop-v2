@@ -1,83 +1,67 @@
-import mongoose from 'mongoose';
+import { docClient } from '../config/db.js';
 
-const orderSchema = mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'User',
-    },
-    orderItems: [
-      {
-        name: { type: String, required: true },
-        qty: { type: Number, required: true },
-        image: { type: String, required: true },
-        price: { type: Number, required: true },
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          required: true,
-          ref: 'Product',
-        },
-      },
-    ],
-    shippingAddress: {
-      address: { type: String, required: true },
-      city: { type: String, required: true },
-      postalCode: { type: String, required: true },
-      country: { type: String, required: true },
-    },
-    paymentMethod: {
-      type: String,
-      required: true,
-    },
-    paymentResult: {
-      id: { type: String },
-      status: { type: String },
-      update_time: { type: String },
-      email_address: { type: String },
-    },
-    itemsPrice: {
-      type: Number,
-      required: true,
-      default: 0.0,
-    },
-    taxPrice: {
-      type: Number,
-      required: true,
-      default: 0.0,
-    },
-    shippingPrice: {
-      type: Number,
-      required: true,
-      default: 0.0,
-    },
-    totalPrice: {
-      type: Number,
-      required: true,
-      default: 0.0,
-    },
-    isPaid: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    paidAt: {
-      type: Date,
-    },
-    isDelivered: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    deliveredAt: {
-      type: Date,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
+const TableName = 'Orders';
 
-const Order = mongoose.model('Order', orderSchema);
+// Helper function to generate unique IDs
+const generateId = () => Date.now().toString();
 
-export default Order;
+// Fetch all orders
+const getAllOrders = async () => {
+  const params = {
+    TableName,
+  };
+  const result = await docClient.scan(params).promise();
+  return result.Items;
+};
+
+// Fetch order by ID
+const getOrderById = async (orderId) => {
+  const params = {
+    TableName,
+    Key: { orderId },
+  };
+  const result = await docClient.get(params).promise();
+  return result.Item;
+};
+
+// Create order
+const createOrder = async (order) => {
+  const params = {
+    TableName,
+    Item: order,
+  };
+  await docClient.put(params).promise();
+  return order;
+};
+
+// Update order
+const updateOrder = async (orderId, updateParams) => {
+  const params = {
+    TableName,
+    Key: { orderId },
+    UpdateExpression: `set ${Object.keys(updateParams).map((k, i) => `#${k} = :${k}`).join(', ')}`,
+    ExpressionAttributeNames: Object.keys(updateParams).reduce((acc, k) => ({ ...acc, [`#${k}`]: k }), {}),
+    ExpressionAttributeValues: Object.keys(updateParams).reduce((acc, k) => ({ ...acc, [`:${k}`]: updateParams[k] }), {}),
+    ReturnValues: 'ALL_NEW',
+  };
+  const result = await docClient.update(params).promise();
+  return result.Attributes;
+};
+
+// Delete order
+const deleteOrder = async (orderId) => {
+  const params = {
+    TableName,
+    Key: { orderId },
+  };
+  await docClient.delete(params).promise();
+};
+
+export {
+  getAllOrders,
+  getOrderById,
+  createOrder,
+  updateOrder,
+  deleteOrder,
+  generateId,
+};

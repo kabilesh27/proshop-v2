@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import asyncHandler from './asyncHandler.js';
-import User from '../models/userModel.js';
+import { getUserByIdController } from '../controllers/userController.js';
+import { getUserById } from '../models/userModel.js';
 
 // User must be authenticated
 const protect = asyncHandler(async (req, res, next) => {
@@ -8,12 +9,11 @@ const protect = asyncHandler(async (req, res, next) => {
 
   // Read JWT from the 'jwt' cookie
   token = req.cookies.jwt;
-
   if (token) {
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      req.user = await User.findById(decoded.userId).select('-password');
+      const decoded = jwt.verify(token, "f34b6f1b8d2053f3647d04bf4e37cbfd0738853d48df5befa3ea44c99494e205aab6bdeb41e03cdb4c6b60e8c9c8e3a3df186f5a6128e103de88e7c45022fb8d");
+      
+      req.user = await getUserById(decoded.userId);
 
       next();
     } catch (error) {

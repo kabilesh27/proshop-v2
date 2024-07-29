@@ -100,7 +100,7 @@ const OrderScreen = () => {
     await deliverOrder(orderId);
     refetch();
   };
-
+console.log(order);
   return isLoading ? (
     <Loader />
   ) : error ? (

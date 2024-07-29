@@ -37,9 +37,9 @@ const ProfileScreen = () => {
     } else {
       try {
         const res = await updateProfile({
-          // NOTE: here we don't need the _id in the request payload as this is
+          // NOTE: here we don't need the orderId in the request payload as this is
           // not used in our controller.
-          // _id: userInfo._id,
+          // orderId: userInfo.orderId,
           name,
           email,
           password,
@@ -126,8 +126,8 @@ const ProfileScreen = () => {
             </thead>
             <tbody>
               {orders.map((order) => (
-                <tr key={order._id}>
-                  <td>{order._id}</td>
+                <tr key={order.orderId}>
+                  <td>{order.orderId}</td>
                   <td>{order.createdAt.substring(0, 10)}</td>
                   <td>{order.totalPrice}</td>
                   <td>
@@ -147,7 +147,7 @@ const ProfileScreen = () => {
                   <td>
                     <Button
                       as={Link}
-                      to={`/order/${order._id}`}
+                      to={`/order/${order.orderId}`}
                       className='btn-sm'
                       variant='light'
                     >
