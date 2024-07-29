@@ -68,7 +68,7 @@ Rename the `.env.example` file to `.env` and add the following
 
 ```
 NODE_ENV = development
-PORT = 6000
+PORT = 5000
 MONGO_URI = your mongodb uri
 JWT_SECRET = 'abc123'
 PAYPAL_CLIENT_ID = your paypal client id
@@ -344,8 +344,8 @@ export default defineConfig({
   server: {
     // proxy requests prefixed '/api' and '/uploads'
     proxy: {
-      '/api': 'http://54.156.109.164:6000',
-      '/uploads': 'http://54.156.109.164:6000',
+      '/api': 'http://54.156.109.164:5000',
+      '/uploads': 'http://54.156.109.164:5000',
     },
   },
 });
