@@ -35,6 +35,7 @@ const LoginScreen = () => {
     try {
       const res = await login({ email, password }).unwrap();
       document.cookie = `jwt=${res.token}; path=/; SameSite=Strict; max-age=${30 * 24 * 60 * 60}`;
+      localStorage.setItem("token", res.token);
       dispatch(setCredentials({ ...res }));
       navigate(redirect);
     } catch (err) {

@@ -13,8 +13,16 @@ const baseQuery = fetchBaseQuery({
 });
 
 async function baseQueryWithAuth(args, api, extra) {
+  const token = localStorage.getItem("token");
+  if (token && typeof args !== 'string') {
+    args.headers = {
+      ...args.headers,
+      Authorization: `Bearer ${token}`,
+    };
+  }
   const result = await baseQuery(args, api, extra);
   // Dispatch the logout action on 401.
+
   if (result.error && result.error.status === 401) {
     api.dispatch(logout());
   }
