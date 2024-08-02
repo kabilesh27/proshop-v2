@@ -89,7 +89,7 @@ npm install
 
 ```
 
-# Run frontend (:3000) & backend (:6000)
+# Run frontend (:3000) & backend (:5000)
 npm run dev
 
 # Run backend only
@@ -344,8 +344,8 @@ export default defineConfig({
   server: {
     // proxy requests prefixed '/api' and '/uploads'
     proxy: {
-      '/api': 'http://54.156.109.164:5000',
-      '/uploads': 'http://54.156.109.164:5000',
+      '/api': 'http://3.92.18.142:5000',
+      '/uploads': 'http://3.92.18.142:5000',
     },
   },
 });
