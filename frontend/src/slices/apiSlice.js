@@ -9,7 +9,7 @@ import { logout } from './authSlice'; // Import the logout action
 // https://redux-toolkit.js.org/rtk-query/usage/customizing-queries#customizing-queries-with-basequery
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://3.92.18.142:5000",
+  baseUrl: BASE_URL,
 });
 
 async function baseQueryWithAuth(args, api, extra) {
