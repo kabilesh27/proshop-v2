@@ -344,8 +344,8 @@ export default defineConfig({
   server: {
     // proxy requests prefixed '/api' and '/uploads'
     proxy: {
-      '/api': 'http://3.92.18.142:5000',
-      '/uploads': 'http://3.92.18.142:5000',
+      '/api': 'http://3.93.151.248:5000',
+      '/uploads': 'http://3.93.151.248:5000',
     },
   },
 });

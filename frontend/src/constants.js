@@ -1,6 +1,6 @@
 // export const BASE_URL =
 //   process.env.NODE_ENV === 'develeopment' ? 'http://54.156.109.164:5000' : '';
-export const BASE_URL = 'http://3.85.3.63:5000'; // If using proxy
+export const BASE_URL = 'http://3.93.151.248:5000'; // If using proxy
 export const PRODUCTS_URL = '/api/products';
 export const USERS_URL = '/api/users';
 export const ORDERS_URL = '/api/orders';
