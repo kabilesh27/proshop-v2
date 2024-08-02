@@ -382,8 +382,8 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': 'http://3.92.18.142:5000',
-      '/uploads': 'http://3.92.18.142:5000',
+      '/api': 'http://3.85.3.63:5000',
+      '/uploads': 'http://3.85.3.63:5000',
     },
   },
 });
