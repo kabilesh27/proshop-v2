@@ -42,7 +42,7 @@ router.post('/', (req, res) => {
     const filename = `${uuidv4()}${fileExtension}`;
 
     const params = {
-      Bucket: process.env.S3_BUCKET_NAME, // Your bucket name
+      Bucket: "proshopv2",
       Key: filename,
       Body: fileContent,
       ContentType: req.file.mimetype,
