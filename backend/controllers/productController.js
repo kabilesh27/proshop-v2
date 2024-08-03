@@ -28,7 +28,7 @@ const getProductByIdController = asyncHandler(async (req, res) => {
 const createProductController = asyncHandler(async (req, res) => {
   const product = {
     productId: generateId(),
-    user: req.user.userId,
+    user: req.user,
     name: req.body.name,
     image: req.body.image,
     brand: req.body.brand,

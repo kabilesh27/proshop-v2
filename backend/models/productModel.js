@@ -1,7 +1,8 @@
 import { docClient } from '../config/db.js';
+import { v6 as uuidv6 } from 'uuid';
 
 // Helper function to generate unique IDs
-const generateId = () => Date.now().toString();
+const generateId = () => uuidv6();
 
 // Create a product
 const createProduct = async (product) => {

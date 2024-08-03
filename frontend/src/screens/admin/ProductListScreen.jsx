@@ -79,9 +79,9 @@ const ProductListScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {data.products.map((product) => (
-                <tr key={product.userId}>
-                  <td>{product.userId}</td>
+              {data.map((product) => (
+                <tr key={product.productId}>
+                  <td>{product.productId}</td>
                   <td>{product.name}</td>
                   <td>${product.price}</td>
                   <td>{product.category}</td>
@@ -89,7 +89,7 @@ const ProductListScreen = () => {
                   <td>
                     <Button
                       as={Link}
-                      to={`/admin/product/${product.userId}/edit`}
+                      to={`/admin/product/${product.productId}/edit`}
                       variant='light'
                       className='btn-sm mx-2'
                     >
