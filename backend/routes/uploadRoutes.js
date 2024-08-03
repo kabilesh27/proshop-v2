@@ -1,20 +1,18 @@
 import path from 'path';
 import express from 'express';
 import multer from 'multer';
+import AWS from 'aws-sdk';
+import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename(req, file, cb) {
-    cb(
-      null,
-      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
-    );
-  },
+// Configure AWS SDK (No need to provide accessKeyId and secretAccessKey)
+const s3 = new AWS.S3({
+  region: process.env.AWS_REGION,
 });
+
+// Multer setup
+const storage = multer.memoryStorage();
 
 function fileFilter(req, file, cb) {
   const filetypes = /jpe?g|png|webp/;
@@ -39,9 +37,26 @@ router.post('/', (req, res) => {
       return res.status(400).send({ message: err.message });
     }
 
-    res.status(200).send({
-      message: 'Image uploaded successfully',
-      image: `/${req.file.path}`,
+    const fileContent = req.file.buffer;
+    const fileExtension = path.extname(req.file.originalname);
+    const filename = `${uuidv4()}${fileExtension}`;
+
+    const params = {
+      Bucket: process.env.S3_BUCKET_NAME, // Your bucket name
+      Key: filename,
+      Body: fileContent,
+      ContentType: req.file.mimetype,
+    };
+
+    s3.upload(params, (err, data) => {
+      if (err) {
+        return res.status(500).send({ message: 'Error uploading image to S3', error: err });
+      }
+
+      res.status(200).send({
+        message: 'Image uploaded successfully',
+        imageUrl: data.Location,
+      });
     });
   });
 });
