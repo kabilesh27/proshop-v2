@@ -8,7 +8,7 @@ const router = express.Router();
 
 // Configure AWS SDK (No need to provide accessKeyId and secretAccessKey)
 const s3 = new AWS.S3({
-  region: process.env.AWS_REGION,
+  region: "us-east-1",
 });
 
 // Multer setup
